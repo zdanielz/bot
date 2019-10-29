@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-.
 import telebot
-from telebot import types
 from os import path, remove
 import const_bot as const
 from datetime import datetime
@@ -40,7 +39,7 @@ def log(message):
 
 @bot.message_handler(commands=["start"])
 def handle_start(message):
-    user_markup = types.ReplyKeyboardMarkup(True, False, None, 1)
+    user_markup = telebot.types.ReplyKeyboardMarkup(True, False, None, 1)
     user_markup.add("пробить")
     bot.send_message(message.from_user.id, "хотите пробить человека?\nВы пришли по адресу!\n"
                                          , reply_markup=user_markup)
@@ -60,15 +59,15 @@ def contact_handler(message):
 
 
 def start_markup(message):
-    user_markup = types.ReplyKeyboardMarkup(True, False, None, 1)
+    user_markup = telebot.types.ReplyKeyboardMarkup(True, False, None, 1)
     user_markup.add("пробить")
     bot.send_message(message.from_user.id, "если вы хотите заказать кого-то еще, нажмите кнопку \"пробить\""
                                          , reply_markup=user_markup)
 
 
 def get_contact(message):
-    keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    reg_button = types.KeyboardButton(text="добавить телефон к заказу",
+    keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    reg_button = telebot.types.KeyboardButton(text="добавить телефон к заказу",
                                       request_contact=True)
     keyboard.add(reg_button)
     bot.send_message(message.chat.id, "оставтье пожалуйста свой номер телефона"
@@ -110,7 +109,7 @@ def send_mail(message):
 def main_handle(message):
     log(message)
     if message.text == "пробить":
-        user_markup = types.ReplyKeyboardMarkup(True, row_width=1)
+        user_markup = telebot.types.ReplyKeyboardMarkup(True, row_width=1)
         user_markup.row("отправить данные")
         bot.send_message(message.chat.id, "укажите пожалуйста некоторые данные и мы сможем начать.\n"
                                           "от вас требуется номер или почта жертвы а так-же ими и фамилия "
@@ -118,6 +117,7 @@ def main_handle(message):
                                           "предоставить отчество жертвы или другие данные которые "
                                           "у вас имеются", reply_markup=user_markup)
     elif "@" in message.text:
+        
         try:
             mail = re.findall(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b', message.text)
             data = ''
@@ -134,7 +134,7 @@ def main_handle(message):
 
     else:
         if len(message.text) < 25:
-            user_markup = types.ReplyKeyboardMarkup(True, row_width=1)
+            user_markup = telebot.types.ReplyKeyboardMarkup(True, row_width=1)
             user_markup.row("отправить данные еще раз")
             bot.send_message(message.chat.id, "вы указали слишком мало информации, повторите пожалуйста отправку данных"
                              , reply_markup=user_markup)
