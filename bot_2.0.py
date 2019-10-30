@@ -45,33 +45,11 @@ def handle_start(message):
                                          , reply_markup=user_markup)
 
 
-@bot.message_handler(content_types=['contact'])
-def contact_handler(message):
-    data = ''
-    if path.isfile("./data/" + str(message.from_user.id) + ".txt"):
-        file = codecs.open("./data/" + str(message.from_user.id) + ".txt", "r", "cp1251")
-        data = file.read()
-        file.close()
-    file = codecs.open("./data/" + str(message.from_user.id) + ".txt", "w", "cp1251")
-    file.write(data + message.contact.phone_number + "\n")
-    file.close()
-    bot.send_message(message.from_user.id, "также укажите пожалуйста свою почту gmail")
-
-
 def start_markup(message):
     user_markup = telebot.types.ReplyKeyboardMarkup(True, False, None, 1)
     user_markup.add("пробить")
     bot.send_message(message.from_user.id, "если вы хотите заказать кого-то еще, нажмите кнопку \"пробить\""
                                          , reply_markup=user_markup)
-
-
-def get_contact(message):
-    keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-    reg_button = telebot.types.KeyboardButton(text="добавить телефон к заказу",
-                                      request_contact=True)
-    keyboard.add(reg_button)
-    bot.send_message(message.chat.id, "оставтье пожалуйста свой номер телефона"
-                                    , reply_markup=keyboard)
 
 
 def send_mail(message):
@@ -142,7 +120,8 @@ def main_handle(message):
             file = codecs.open("./data/" + str(message.from_user.id) + ".txt", "w", "cp1251")
             file.write(message.text + "\n")
             file.close()
-            get_contact(message)
+            bot.send_message(message.from_user.id, "укажите пожалуйста свою почту gmail чтобы мы могли с вами связатся")
+
 
 
 print(datetime.now() - start)
